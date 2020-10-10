@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/music")
 @RequiredArgsConstructor
-public class MusicController {
+public class MusicRestController {
 
   public final MusicService musicService;
 

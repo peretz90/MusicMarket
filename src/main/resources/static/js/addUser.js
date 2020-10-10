@@ -1,4 +1,4 @@
-let userApi = Vue.resource('/user');
+const userApi = Vue.resource('/user');
 
 const store = new Vuex.Store({
   state: {
@@ -12,14 +12,22 @@ const store = new Vuex.Store({
 });
 
 Vue.component('user-form', {
+  props: ['email'],
   template: `
-    <form id="formUser" class="form-group">
-      <input type="text" name="username" class="form-control" placeholder="Username" />
-      <input type="password" name="password" class="form-control" placeholder="Password" />
-      <input type="email" name="email" class="form-control" placeholder="Email" />
-      <input type="date" name="birthday" class="form-control" />
-      <input type="button" @click.prevent="save" class="btn bg-info" value="add user" />
-    </form>
+    <div>
+      <form id="formUser" class="form-group">
+        <input type="email" name="username" class="form-control" placeholder="Email" :value="email" />
+        <input type="password" name="password" class="form-control" placeholder="Password" />
+        <input type="date" name="birthday" class="form-control" />
+        <input type="button" @click.prevent="save" class="btn bg-info" value="add user" />
+      </form>
+      <div>
+        With Google: <a href="/oauth2/authorization/google">click here</a>
+      </div>
+      <div>
+        With Facebook: <a href="/oauth2/authorization/facebook">click here</a>
+      </div>
+    </div>
   `,
   methods: {
     save() {
@@ -27,7 +35,7 @@ Vue.component('user-form', {
       let data = new FormData(form);
       userApi.save({}, data).then(result => {
         if(result.ok) {
-          return window.location.href = '/users';
+          return window.location.href = '/musics';
         }
       })
     }
@@ -38,11 +46,8 @@ new Vue({
   data: () => ({
     users: []
   }),
-  el: '#add-user',
+  el: '#add',
   store,
-  template: `
-    <user-form></user-form>
-  `,
   created() {
     userApi.get().then(result =>
       result.json().then(data =>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/head :: headers"></head>
+<body>
+  <div class="jumbotron-fluid">
+    You have successfully logged in. The home page will open automatically in 5 seconds. if this doesn't happen, click
+    <a href="/">here</a>
+  </div>
+  <script>
+    setTimeout(function(){
+      window.location.href = '/';
+    }, 5 * 1000);
+  </script>
+</body>
+</html>
