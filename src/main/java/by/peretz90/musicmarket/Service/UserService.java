@@ -10,9 +10,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,16 +22,33 @@ public class UserService implements UserDetailsService {
 
   public final UserRepo userRepo;
   public final PasswordEncoder passwordEncoder;
+  public final MailSenderService mailSenderService;
 
   public List<User> users() {
     return userRepo.findAll();
   }
 
   public void addUser(User user) {
-    user.setActive(true);
+    user.setActivationCode(UUID.randomUUID().toString());
+    user.setActive(false);
     user.setRoles(Collections.singleton(UserRole.ROLE_USER));
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     userRepo.save(user);
+    sendMessage(user);
+  }
+
+  private void sendMessage(User user){
+    if(!StringUtils.isEmpty(user.getUsername())){
+
+      String message = String.format(
+          "Hello, %s! \n" +
+              "Welcome to music market. Please visit next link http://localhost:8080/activate/%s",
+          user.getUsername(),
+          user.getActivationCode()
+      );
+
+      mailSenderService.send(user.getUsername(), "Activation code", message);
+    }
   }
 
   public void addUser(OAuth2User principal) {
@@ -57,5 +76,20 @@ public class UserService implements UserDetailsService {
     }
 
     return user;
+  }
+
+  public boolean activateUser(String code) {
+    User userByCode = userRepo.findByActivationCode(code);
+
+    if (userByCode == null){
+      return false;
+    } else {
+
+      userByCode.setActivationCode(null);
+      userByCode.setActive(true);
+      userRepo.save(userByCode);
+
+      return true;
+    }
   }
 }

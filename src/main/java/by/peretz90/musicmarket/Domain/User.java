@@ -26,6 +26,7 @@ public class User extends AbstractEntity implements UserDetails {
 
   @NotBlank
   @Email
+  @Column(unique = true)
   private String username;
 
   @NotBlank
@@ -36,6 +37,8 @@ public class User extends AbstractEntity implements UserDetails {
 
   private String firstName;
   private String lastName;
+
+  private String activationCode;
 
   private boolean isActive;
 

@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -44,6 +45,22 @@ public class MainController {
   @GetMapping("/success")
   public String success() {
     return "success";
+  }
+
+  @GetMapping("/activate/{code}")
+  public String activate(
+      @PathVariable("code") String code,
+      Model model
+  ) {
+    boolean isActivated = userService.activateUser(code);
+
+    if (isActivated) {
+      model.addAttribute("message", "The code was successfully activated!!! \n" +
+          "Please login to the site");
+    } else {
+      model.addAttribute("message", "Activation code isn't found");
+    }
+    return "activation";
   }
 
   @GetMapping("/success/oauth2")
