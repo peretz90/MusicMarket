@@ -31,7 +31,6 @@ public class User extends AbstractEntity implements UserDetails {
   @NotBlank
   private String password;
 
-  @NotNull
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate birthday;
 

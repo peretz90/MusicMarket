@@ -3,7 +3,9 @@
 <head th:replace="commons/fragments :: headers"></head>
 <body>
 <div th:replace="commons/fragments :: navbar"></div>
-  <div id="users"></div>
-<script src="/static/js/users.js"></script>
+  <div id="oauth">
+    <info th:email="${email}" th:password="${password}"></info>
+  </div>
+<script src="/static/js/oauthSuccess.js"></script>
 </body>
 </html>

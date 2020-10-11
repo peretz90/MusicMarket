@@ -3,15 +3,16 @@
 <head th:replace="commons/fragments :: headers"></head>
 <body>
 <div th:replace="commons/fragments :: navbar"></div>
-<div id="add">
-  <user-form></user-form>
+  <form method="post" action="/login">
+    <input type="email" name="username" />
+    <input type="password" name="password" />
+    <button type="submit">Login</button>
+  </form>
   <div>
     With Google: <a href="/oauth2/authorization/google">login</a>
   </div>
   <div>
     With Facebook: <a href="/oauth2/authorization/facebook">login</a>
   </div>
-</div>
-<script src="/static/js/addUser.js"></script>
 </body>
 </html>

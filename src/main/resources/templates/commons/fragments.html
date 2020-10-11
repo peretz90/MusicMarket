@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+
+<body>
+
+<head th:fragment="headers">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Music Market</title>
+    <link rel="stylesheet" href="/static/css/libraries/bootstrap/bootstrap.css">
+    <script src="/static/js/libraries/vue/vue.js"></script>
+    <script src="/static/js/libraries/vue/vuex.js"></script>
+    <script src="/static/js/libraries/vue/vue-resource.js"></script>
+</head>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="/">Music Market</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav mr-md-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/musics">Musics</a>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" href="/registration">Registration</a>
+            </li>
+        </ul>
+        <div class="navbar-text">
+            <div class="d-flex" sec:authorize="isAuthenticated()">
+                <a href="#" sec:authentication="name" class="mr-3 my-auto">Username</a>
+                <form method="post" action="/logout"><button type="submit" class="btn btn-info">Logged out</button> </form>
+            </div>
+            <div sec:authorize="!isAuthenticated()">
+                <a href="/login" class="btn btn-info">Login</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+</body>
+
+</html>

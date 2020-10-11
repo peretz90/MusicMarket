@@ -1,13 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="commons/head :: headers"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/fragments :: headers"></head>
 <body>
+  <div th:replace="commons/fragments :: navbar"></div>
   <h1>Hello user</h1>
-  <a th:href="@{/musics/add}">Add music</a>
-  <a th:href="@{/musics}">music</a>
-  <a th:href="@{/registration}">registration</a>
-  <div sec:authorize="isAuthenticated()">
-    Welcome, <span th:text="${#authentication.principal}"></span>
-  </div>
   </body>
 </html>

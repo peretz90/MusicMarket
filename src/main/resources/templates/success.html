@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="commons/head :: headers"></head>
+<head th:replace="commons/fragments :: headers"></head>
 <body>
-  <div class="jumbotron-fluid">
-    You have successfully logged in. The home page will open automatically in 5 seconds. if this doesn't happen, click
-    <a href="/">here</a>
+<div th:replace="commons/fragments :: navbar"></div>
+  <div class="jumbotron" id="success">
+    <h3>You have successfully registered! Please check your email address to complete registration!!!</h3>
+    <h4>(you will be taken to the main page in 5 seconds, if this did not happen, click <a href="/">here</a>)</h4>
   </div>
   <script>
     setTimeout(function(){

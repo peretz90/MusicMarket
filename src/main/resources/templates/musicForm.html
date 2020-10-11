@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="commons/head::headers">
+<head th:replace="commons/fragments::headers">
 <body>
+<div th:replace="commons/fragments :: navbar"></div>
   <div th:replace="commons/music-form::music-form"></div>
 </body>
 </html>

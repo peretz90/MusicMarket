@@ -12,21 +12,14 @@ const store = new Vuex.Store({
 });
 
 Vue.component('user-form', {
-  props: ['email'],
   template: `
     <div>
       <form id="formUser" class="form-group">
-        <input type="email" name="username" class="form-control" placeholder="Email" :value="email" />
+        <input type="email" name="username" class="form-control" placeholder="Email" />
         <input type="password" name="password" class="form-control" placeholder="Password" />
         <input type="date" name="birthday" class="form-control" />
         <input type="button" @click.prevent="save" class="btn bg-info" value="add user" />
       </form>
-      <div>
-        With Google: <a href="/oauth2/authorization/google">click here</a>
-      </div>
-      <div>
-        With Facebook: <a href="/oauth2/authorization/facebook">click here</a>
-      </div>
     </div>
   `,
   methods: {
@@ -35,7 +28,7 @@ Vue.component('user-form', {
       let data = new FormData(form);
       userApi.save({}, data).then(result => {
         if(result.ok) {
-          return window.location.href = '/musics';
+          return window.location.href = '/success';
         }
       })
     }

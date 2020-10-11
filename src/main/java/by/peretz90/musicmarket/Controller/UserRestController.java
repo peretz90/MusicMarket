@@ -24,10 +24,10 @@ public class UserRestController {
   }
 
   @PostMapping
-  public User addUser(
+  public void addUser(
       @Valid User user
   ) {
-    return userService.addUser(user);
+    userService.addUser(user);
   }
 
 }
