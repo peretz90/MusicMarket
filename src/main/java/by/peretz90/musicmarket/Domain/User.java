@@ -40,7 +40,7 @@ public class User extends AbstractEntity implements UserDetails {
 
   private String activationCode;
 
-  private boolean isActive;
+  private boolean active;
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)
@@ -73,6 +73,6 @@ public class User extends AbstractEntity implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return isActive;
+    return active;
   }
 }

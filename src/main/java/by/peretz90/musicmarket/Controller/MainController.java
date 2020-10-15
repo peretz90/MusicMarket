@@ -82,4 +82,14 @@ public class MainController {
     return "successOauth2";
   }
 
+  @GetMapping("/users")
+  public String users() {
+    return "users";
+  }
+
+  @GetMapping("/users/profile")
+  public String profile() {
+    return "profile";
+  }
+
 }

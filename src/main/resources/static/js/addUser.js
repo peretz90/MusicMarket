@@ -23,9 +23,12 @@ const store = new Vuex.Store({
 Vue.component('user-form', {
   data: () => ({
     username: '',
+    password: '',
     disable: false,
     validEmail: false,
-    messageEmail: 'the email field must not be empty'
+    messageEmail: 'the email field must not be empty',
+    validPassword: false,
+    messagePassword: 'the password field must not be empty'
   }),
   template: `
     <div style="width: 500px">
@@ -36,13 +39,13 @@ Vue.component('user-form', {
           <div class="invalid-feedback">{{ messageEmail }}</div>
         </div>
         <div>
-          <input type="password" name="password" class="form-control" :class="" placeholder="Password" required />
-          <div class="valid-feedback"></div>
-          <div class="invalid-feedback"></div>
+          <input type="password" name="password" class="form-control" :class="validPasswordClass" placeholder="Password" v-model="password" required />
+          <div class="valid-feedback">{{ messagePassword }}</div>
+          <div class="invalid-feedback">{{ messagePassword }}</div>
         </div>
         <input type="date" name="birthday" class="form-control" />
-        <input v-if="validEmail" type="button" @click.prevent="save" class="btn btn-info" value="add user" />
-        <input v-if="!validEmail" type="button" class="btn btn-info" value="add user" disabled />
+        <input v-if="validEmail && validPassword" type="button" @click.prevent="save" class="btn btn-info" value="add user" />
+        <input v-if="!validEmail || !validPassword" type="button" class="btn btn-info" value="add user" disabled />
       </form>
     </div>
   `,
@@ -58,6 +61,9 @@ Vue.component('user-form', {
     },
     setMessageEmail(message) {
       this.messageEmail = message
+    },
+    setMessagePassword(message) {
+      this.messagePassword = message
     }
   },
   watch: {
@@ -69,9 +75,21 @@ Vue.component('user-form', {
       } else if (this.disable) {
         this.setMessageEmail('This email is already registered');
         this.validEmail = false;
+      } else if (!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(value)) {
+        this.setMessageEmail('Email doesn\'t match the format');
+        this.validEmail = false;
       } else {
         this.setMessageEmail('This email is unique');
         this.validEmail = true;
+      }
+    },
+    password(value) {
+      if (value.length < 6) {
+        this.validPassword = false;
+        this.setMessagePassword('The password cannot be less than 6 characters long');
+      } else {
+        this.validPassword = true;
+        this.setMessagePassword('The password matches the template');
       }
     }
   },
@@ -80,6 +98,12 @@ Vue.component('user-form', {
       return {
         'is-valid': this.validEmail,
         'is-invalid': !this.validEmail
+      }
+    },
+    validPasswordClass() {
+      return {
+        'is-valid': this.validPassword,
+        'is-invalid': !this.validPassword
       }
     }
   }
@@ -98,6 +122,5 @@ new Vue({
       )
     )
     this.$store.commit('setUsers', this.users);
-    console.log(this.users);
   }
 });

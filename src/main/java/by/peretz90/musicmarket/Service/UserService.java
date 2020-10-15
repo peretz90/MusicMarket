@@ -4,6 +4,7 @@ import by.peretz90.musicmarket.Domain.User;
 import by.peretz90.musicmarket.Domain.UserRole;
 import by.peretz90.musicmarket.Repository.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,9 +13,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,8 +57,8 @@ public class UserService implements UserDetailsService {
       String name = principal.getAttribute("name");
       if (name != null) {
         int index = name.indexOf(' ');
-        user.setLastName(name.substring(0, index));
-        user.setFirstName(name.substring(index + 1));
+        user.setFirstName(name.substring(0, index));
+        user.setLastName(name.substring(index + 1));
       }
       user.setUsername(principal.getAttribute("email"));
       user.setPassword(passwordEncoder.encode("raM3x41vtF4q|Qf|RBc9Aiunu$U5MmVQLxjsG~XO#~kz4G$Vi?"));
@@ -91,5 +91,19 @@ public class UserService implements UserDetailsService {
 
       return true;
     }
+  }
+
+  public User saveUser(User userEdit, User user, Map<String, String> form) {
+    BeanUtils.copyProperties(userEdit, user, "id", "username", "password", "active", "roles", "createdDate", "updateDate");
+    Set<String> roles = Arrays.stream(UserRole.values())
+        .map(UserRole::name)
+        .collect(Collectors.toSet());
+    user.getRoles().clear();
+    for(String key : form.keySet()) {
+      if (roles.contains(key)) {
+        user.getRoles().add(UserRole.valueOf(key));
+      }
+    }
+    return userRepo.save(user);
   }
 }
