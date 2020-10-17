@@ -4,11 +4,7 @@
 <body>
 <div th:replace="commons/fragments :: navbar"></div>
 <div id="musics">
-  <h3 class="mx-auto" style="width: 500px">Music List</h3>
-  <div>
-    <music-row th:each="music : ${musics}" th:name="${music.name}" th:url="${music.url}"></music-row>
-    <music-player th:url="${musics[0].url}" class="fixed-bottom w-100 bg-dark text-light d-flex" style="height: 80px"></music-player>
-  </div>
+
 </div>
 
 <script src="/static/js/musics.js"></script>

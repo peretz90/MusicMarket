@@ -2,6 +2,7 @@ package by.peretz90.musicmarket.Domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
+@ToString
 public class User extends AbstractEntity implements UserDetails {
 
   @Id

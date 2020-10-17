@@ -1,6 +1,7 @@
 package by.peretz90.musicmarket.Service;
 
 import by.peretz90.musicmarket.Domain.Music;
+import by.peretz90.musicmarket.Domain.User;
 import by.peretz90.musicmarket.Repository.MusicRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,7 @@ public class MusicService {
     return musicRepo.findAll();
   }
 
-  public Music addMusic(Music music, MultipartFile file) throws IOException {
+  public Music addMusic(Music music, MultipartFile file, User user) throws IOException {
     if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
 
       File uploadDirectory = new File(uploadPath);
@@ -38,6 +39,7 @@ public class MusicService {
 
       file.transferTo(new File(uploadPath + "/" + resultFilename));
       music.setUrl(resultFilename);
+      music.setUserAuthor(user);
       return musicRepo.save(music);
     }
     return null;

@@ -1,3 +1,5 @@
+const musicsApi = Vue.resource('/music');
+
 const convertTimeHHMMSS = (val) => {
   let hhmmss = new Date(val * 1000).toISOString().substr(11, 8);
 
@@ -10,7 +12,8 @@ const store = new Vuex.Store({
     audio: undefined,
     playing: false,
     name: '',
-    author: ''
+    author: '',
+    musics: []
   },
   mutations: {
     setUrl(state, url) {
@@ -30,6 +33,9 @@ const store = new Vuex.Store({
     },
     setAuthor(state, author) {
       state.author = author;
+    },
+    setMusics(state, musics) {
+      state.musics = musics;
     }
   }
 });
@@ -57,7 +63,8 @@ Vue.component('music-player', {
         <span class="mx-auto my-auto">{{ currentTime }} / {{ durationTime }}</span>
       </div>
       <div class="h-100 d-flex mx-2">
-        <span class="mx-auto my-auto">{{ this.$store.state.name }}</span>
+        <span class="my-auto mr-3"><strong>{{ this.$store.state.name }}</strong></span>
+        <span class="my-auto"><i>{{ this.$store.state.author }}</i></span>
       </div>
       <audio :src="'/music/' + this.$store.state.url" style="display: none" @durationchange="newAudio"></audio>
     </div>
@@ -117,7 +124,7 @@ Vue.component('music-player', {
 });
 
 Vue.component('music-row', {
-  props: ['name', 'url'],
+  props: ['name', 'url', 'author'],
   template: `
     <div style="background: #f6f6f6; height: 45px; width: 500px" class="d-flex mx-auto my-2">
       <div class="d-flex mx-2 rounded-circle border border-info my-auto" style="width: 35px; height: 35px" @click.prevent="thisPlay">
@@ -129,7 +136,8 @@ Vue.component('music-row', {
         </svg>
       </div>
       <div class="h-100 d-flex">
-        <span class="my-auto">{{ this.name }}</span>
+        <span class="my-auto mr-3"><strong>{{ this.name }}</strong></span>
+        <span class="my-auto"><i>{{ this.author }}</i></span>
       </div>
     </div>
   `,
@@ -138,6 +146,7 @@ Vue.component('music-row', {
       if (this.url !== this.$store.state.url) {
         this.$store.commit('setName', this.name);
         this.$store.commit('setUrl', this.url);
+        this.$store.commit('setAuthor', this.author);
       } else {
         if (this.$store.state.playing) {
           this.$store.state.audio.pause();
@@ -159,4 +168,20 @@ Vue.component('music-row', {
 new Vue({
   el: '#musics',
   store,
+  data: () => ({
+    musics: []
+  }),
+  template: `
+    <div>
+      <h3 class="mx-auto" style="width: 500px">Music List</h3>
+      <music-row v-for="music in this.$store.state.musics" :key="music.id" :name="music.name" :url="music.url" :author="music.userAuthor.username"></music-row>
+      <music-player url="" class="fixed-bottom w-100 bg-dark text-light d-flex" style="height: 80px"></music-player>
+    </div>
+  `,
+  created() {
+    musicsApi.get().then(r =>
+      r.json().then(data => data.forEach(music => this.musics.push(music)))
+    );
+    this.$store.commit('setMusics', this.musics);
+  }
 });

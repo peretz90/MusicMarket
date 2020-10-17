@@ -2,6 +2,8 @@ package by.peretz90.musicmarket.Domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table
 @Data
+@NoArgsConstructor
 public class Music extends AbstractEntity {
 
   @Id
@@ -20,5 +23,9 @@ public class Music extends AbstractEntity {
   private String name;
 
   private String url;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @NonNull
+  private User userAuthor;
 
 }

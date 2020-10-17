@@ -32,8 +32,7 @@ public class MainController {
   }
 
   @GetMapping("/musics")
-  public String musics(Model model) {
-    model.addAttribute("musics", musicService.getAllMusic());
+  public String musics() {
     return "musics";
   }
 

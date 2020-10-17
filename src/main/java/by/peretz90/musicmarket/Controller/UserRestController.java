@@ -4,7 +4,6 @@ import by.peretz90.musicmarket.Domain.User;
 import by.peretz90.musicmarket.Domain.UserRole;
 import by.peretz90.musicmarket.Service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
