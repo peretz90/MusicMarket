@@ -73,7 +73,7 @@ public class UserRestController {
   }
 
   @GetMapping("/profile/subscribers")
-  public Set<User> subscribersUsers(@AuthenticationPrincipal User user) {
+  public List<User> subscribersUsers(@AuthenticationPrincipal User user) {
     return userService.subscribersUsers(user);
   }
 
@@ -94,7 +94,7 @@ public class UserRestController {
   }
 
   @GetMapping("/profile/subscriptions")
-  public Set<User> subscriptionsUsers(@AuthenticationPrincipal User user) {
+  public List<User> subscriptionsUsers(@AuthenticationPrincipal User user) {
     return userService.subscriptionsUsers(user);
   }
 

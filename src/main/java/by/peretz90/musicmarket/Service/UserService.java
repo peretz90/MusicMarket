@@ -131,22 +131,22 @@ public class UserService implements UserDetailsService {
     return user;
   }
 
-  public Set<User> subscribersUsers(User user) {
-    return userRepo.findAll().stream().filter(user1 -> user1.getUserSet().contains(user)).collect(Collectors.toSet());
+  public List<User> subscribersUsers(User user) {
+    return userRepo.findAll().stream().filter(user1 -> user1.getUserSet().contains(user)).collect(Collectors.toList());
   }
 
-  public Set<User> subscriptionsUsers(User user) {
+  public List<User> subscriptionsUsers(User user) {
     return user.getUserSet();
   }
 
-  public synchronized User subscribeUser(User user, String username) {
+  public User subscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
     user.getUserSet().add(userId);
     userRepo.save(user);
     return userId;
   }
 
-  public synchronized User unsubscribeUser(User user, String username) {
+  public User unsubscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
     user.getUserSet().remove(userId);
     userRepo.save(user);
