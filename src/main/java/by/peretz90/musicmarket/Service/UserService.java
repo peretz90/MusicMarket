@@ -146,8 +146,8 @@ public class UserService implements UserDetailsService {
   public synchronized User subscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
     Subscribers subscribers = new Subscribers();
-    subscribers.setUserId(user.getId());
-    subscribers.setUserSub(userId.getId());
+    subscribers.setUserId(user);
+    subscribers.setUserSub(userId);
     subscribersRepo.save(subscribers);
     return user;
   }
