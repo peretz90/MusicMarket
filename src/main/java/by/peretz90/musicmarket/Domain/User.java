@@ -12,7 +12,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -50,7 +49,15 @@ public class User extends AbstractEntity implements UserDetails {
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "sub_user_id")
   )
-  private List<User> userSet;
+  private Set<User> userSet;
+
+//  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//  @JoinTable(
+//      name = "users_set",
+//      joinColumns = @JoinColumn(name = "sub_user_id"),
+//      inverseJoinColumns = @JoinColumn(name = "user_id")
+//  )
+//  private Set<User> subUserSet;
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)

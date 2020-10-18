@@ -78,7 +78,7 @@ Vue.component('music-form', {
             "alert-success": true
           }
           setTimeout(() => {
-            this.nameMusic = null;
+            this.nameMusic = '';
           }, 3 * 1000);
         }
       })
