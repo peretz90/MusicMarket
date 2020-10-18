@@ -48,10 +48,10 @@ public class User extends AbstractEntity implements UserDetails, Serializable {
 
   private boolean active;
 
-  @OneToMany(mappedBy = "userId")
+  @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Set<User> userSet;
 
-  @OneToMany(mappedBy = "userSub")
+  @OneToMany(mappedBy = "userSub", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Set<User> userSubSet;
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)

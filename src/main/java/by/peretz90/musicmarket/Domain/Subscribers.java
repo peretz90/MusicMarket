@@ -9,16 +9,14 @@ import javax.persistence.*;
 @Data
 public class Subscribers {
 
-  @EmbeddedId
-  UserKey id;
+  @Id
+  Long id;
 
-  @ManyToOne
-  @MapsId("id")
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
   User userId;
 
-  @ManyToOne
-  @MapsId("id")
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "sub_user_id")
   User userSub;
 

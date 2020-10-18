@@ -1,9 +1,10 @@
 package by.peretz90.musicmarket.Service;
 
+import by.peretz90.musicmarket.Domain.Subscribers;
 import by.peretz90.musicmarket.Domain.User;
 import by.peretz90.musicmarket.Domain.UserRole;
+import by.peretz90.musicmarket.Repository.SubscribersRepo;
 import by.peretz90.musicmarket.Repository.UserRepo;
-import com.fasterxml.jackson.core.JsonParseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
+  public final SubscribersRepo subscribersRepo;
   public final UserRepo userRepo;
   public final PasswordEncoder passwordEncoder;
   public final MailSenderService mailSenderService;
@@ -132,23 +134,27 @@ public class UserService implements UserDetailsService {
     return user;
   }
 
-  public List<User> subscribersUsers(User user) {
-    return userRepo.findAll().stream().filter(user1 -> user1.getUserSet().contains(user)).collect(Collectors.toList());
+  public Set<User> subscribersUsers(User user) {
+//    return userRepo.findAll().stream().filter(user1 -> user1.getUserSet().contains(user)).collect(Collectors.toList());
+    return user.getUserSubSet();
   }
 
-  public List<User> subscriptionsUsers(User user) {
+  public Set<User> subscriptionsUsers(User user) {
     return user.getUserSet();
   }
 
   public User subscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
-    user.getUserSet().add(userId);
-    return userRepo.save(user);
+    Subscribers subscribers = new Subscribers();
+    subscribers.setUserId(user);
+    subscribers.setUserSub(userId);
+    subscribersRepo.save(subscribers);
+    return user;
   }
 
   public void unsubscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
-    user.getUserSet().remove(userId);
-    userRepo.save(user);
+    Subscribers subscribers = subscribersRepo.findByUserIdAndUserSub(user, userId);
+    subscribersRepo.delete(subscribers);
   }
 }
