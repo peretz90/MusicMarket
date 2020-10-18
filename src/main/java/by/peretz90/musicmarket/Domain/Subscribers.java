@@ -10,14 +10,15 @@ import javax.persistence.*;
 public class Subscribers {
 
   @Id
-  Long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
-  User userId;
+  private User userId;
 
   @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "sub_user_id")
-  User userSub;
+  private User userSub;
 
 }
