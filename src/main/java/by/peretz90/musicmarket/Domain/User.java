@@ -1,8 +1,5 @@
 package by.peretz90.musicmarket.Domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -24,7 +20,7 @@ import java.util.Set;
 @Table(name = "users")
 @Data
 @ToString
-public class User extends AbstractEntity implements UserDetails, Serializable {
+public class User extends AbstractEntity implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +44,10 @@ public class User extends AbstractEntity implements UserDetails, Serializable {
 
   private boolean active;
 
-  @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "userId", targetEntity = Subscribers.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private Set<User> userSet;
 
-  @OneToMany(mappedBy = "userSub", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "userSub", targetEntity = Subscribers.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private Set<User> userSubSet;
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)

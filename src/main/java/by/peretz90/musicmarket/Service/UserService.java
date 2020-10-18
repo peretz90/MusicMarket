@@ -143,11 +143,11 @@ public class UserService implements UserDetailsService {
     return user.getUserSet();
   }
 
-  public User subscribeUser(User user, String username) {
+  public synchronized User subscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
     Subscribers subscribers = new Subscribers();
-    subscribers.setUserId(user);
-    subscribers.setUserSub(userId);
+    subscribers.setUserId(user.getId());
+    subscribers.setUserSub(userId.getId());
     subscribersRepo.save(subscribers);
     return user;
   }
