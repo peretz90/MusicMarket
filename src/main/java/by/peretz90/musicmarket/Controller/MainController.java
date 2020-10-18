@@ -86,9 +86,23 @@ public class MainController {
     return "users";
   }
 
-  @GetMapping("/users/profile")
-  public String profile() {
+  @GetMapping("/users/profile/{id}")
+  public String profile(
+      @PathVariable("id") Long id,
+      Model model
+  ) {
+    model.addAttribute("id", id);
     return "profile";
+  }
+
+  @GetMapping("/users/profile/subscribers")
+  public String subscribersUser() {
+    return "subscribers";
+  }
+
+  @GetMapping("users/profile/subscriptions")
+  public String subscriptionsUser() {
+    return "subscriptions";
   }
 
 }

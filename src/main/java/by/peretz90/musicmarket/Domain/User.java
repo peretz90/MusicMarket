@@ -5,14 +5,16 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.Transient;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -43,6 +45,14 @@ public class User extends AbstractEntity implements UserDetails {
   private String activationCode;
 
   private boolean active;
+
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = User.class)
+  @JoinTable(
+      name = "users_set",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "sub_user_id")
+  )
+  private Set<User> userSet = new HashSet<>();
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)

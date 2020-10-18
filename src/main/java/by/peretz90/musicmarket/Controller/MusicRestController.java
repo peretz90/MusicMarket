@@ -21,17 +21,16 @@ public class MusicRestController {
 
   @GetMapping
   public List<Music> listMusic() {
-    System.out.println(musicService.getAllMusic());
     return musicService.getAllMusic();
   }
 
   @PostMapping
-  public Music addMusic(
+  public void addMusic(
       @AuthenticationPrincipal User user,
       @RequestParam MultipartFile file,
       @Valid Music music
   ) throws IOException {
-    return musicService.addMusic(music, file, user);
+    musicService.addMusic(music, file, user);
   }
 
 }

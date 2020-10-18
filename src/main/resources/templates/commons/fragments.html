@@ -41,8 +41,8 @@
         </ul>
         <div class="navbar-text">
             <div class="d-flex" sec:authorize="isAuthenticated()">
-                <a href="#" sec:authentication="name" class="mr-3 my-auto">Username</a>
-                <form method="post" action="/logout"><button type="submit" class="btn btn-info">Logged out</button> </form>
+                <a th:href="@{'/users/profile/' + ${#authentication.principal.id}}" th:text="${#authentication.principal.username}" class="mr-3 my-auto">Username</a>
+                <a href="/logout" class="btn btn-info">Logged out</a>
             </div>
             <div sec:authorize="!isAuthenticated()">
                 <a href="/login" class="btn btn-info">Login</a>

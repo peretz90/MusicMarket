@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -105,5 +107,49 @@ public class UserService implements UserDetailsService {
       }
     }
     return userRepo.save(user);
+  }
+
+  public User editProfile(User user, User authUser, String username, String password, String firstName, String lastName, String birthday) {
+    if (user.getId().equals(authUser.getId())) {
+      if (username != null && password != null) {
+        if (passwordEncoder.matches(password, user.getPassword())) {
+          user.setUsername(username);
+          user.setActivationCode(UUID.randomUUID().toString());
+          user.setActive(false);
+          userRepo.save(user);
+          sendMessage(user);
+        }
+      } else {
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate birthDate = LocalDate.parse(birthday, formatter);
+        user.setBirthday(birthDate);
+        userRepo.save(user);
+      }
+    }
+    return user;
+  }
+
+  public Set<User> subscribersUsers(User user) {
+    return userRepo.findAll().stream().filter(user1 -> user1.getUserSet().contains(user)).collect(Collectors.toSet());
+  }
+
+  public Set<User> subscriptionsUsers(User user) {
+    return user.getUserSet();
+  }
+
+  public synchronized User subscribeUser(User user, String username) {
+    User userId = userRepo.findByUsername(username);
+    user.getUserSet().add(userId);
+    userRepo.save(user);
+    return userId;
+  }
+
+  public synchronized User unsubscribeUser(User user, String username) {
+    User userId = userRepo.findByUsername(username);
+    user.getUserSet().remove(userId);
+    userRepo.save(user);
+    return userId;
   }
 }

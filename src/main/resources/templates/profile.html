@@ -2,7 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="commons/fragments.html :: headers"></head>
 <body>
-  <div id="profile"></div>
+  <div th:replace="commons/fragments.html :: navbar"></div>
+  <div id="profile">
+    <user-info th:id="${id}" th:auth="${#authentication.principal.username}"></user-info>
+  </div>
   <script src="/static/js/profile.js"></script>
 </body>
 </html>

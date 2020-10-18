@@ -27,7 +27,7 @@ public class MusicService {
     return musicRepo.findAll();
   }
 
-  public Music addMusic(Music music, MultipartFile file, User user) throws IOException {
+  public void addMusic(Music music, MultipartFile file, User user) throws IOException {
     if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
 
       File uploadDirectory = new File(uploadPath);
@@ -40,9 +40,8 @@ public class MusicService {
       file.transferTo(new File(uploadPath + "/" + resultFilename));
       music.setUrl(resultFilename);
       music.setUserAuthor(user);
-      return musicRepo.save(music);
+      musicRepo.save(music);
     }
-    return null;
   }
 
   private String renameFile(String originalName, String toName) {
