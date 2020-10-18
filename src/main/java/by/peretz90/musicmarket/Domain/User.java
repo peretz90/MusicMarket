@@ -16,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -49,19 +48,11 @@ public class User extends AbstractEntity implements UserDetails, Serializable {
 
   private boolean active;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinTable(
-      name = "users_set",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "sub_user_id")
-  )
-  @JsonManagedReference
-  @JsonIdentityInfo(
-      property = "id",
-      generator = ObjectIdGenerators.PropertyGenerator.class
-  )
-  @EqualsAndHashCode.Exclude
-  private List<User> userSet;
+  @OneToMany(mappedBy = "userId")
+  private Set<User> userSet;
+
+  @OneToMany(mappedBy = "userSub")
+  private Set<User> userSubSet;
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)

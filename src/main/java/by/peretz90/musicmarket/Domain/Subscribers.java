@@ -15,7 +15,7 @@ public class Subscribers {
   @ManyToOne
   @MapsId("id")
   @JoinColumn(name = "user_id")
-  User user;
+  User userId;
 
   @ManyToOne
   @MapsId("id")
