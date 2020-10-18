@@ -139,7 +139,7 @@ Vue.component('user-info', {
       let data = new FormData();
       data.append("username", this.user.username);
       let index = getIndex(this.subscriptionUsers, this.id);
-      unsubscribeApi.save({}, data).then(r => {
+      unsubscribeApi.remove({}, data).then(r => {
         if (r.ok) {
           this.subscriptionUsers.splice(index, 1);
         }

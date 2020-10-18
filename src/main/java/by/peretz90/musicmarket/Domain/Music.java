@@ -1,6 +1,10 @@
 package by.peretz90.musicmarket.Domain;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,6 +28,7 @@ public class Music extends AbstractEntity {
 
   @ManyToOne(fetch = FetchType.EAGER)
   @NonNull
+  @JsonIdentityReference
   private User userAuthor;
 
 }

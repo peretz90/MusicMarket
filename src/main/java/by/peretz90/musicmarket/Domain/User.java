@@ -1,5 +1,8 @@
 package by.peretz90.musicmarket.Domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,6 +15,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -49,15 +53,27 @@ public class User extends AbstractEntity implements UserDetails {
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "sub_user_id")
   )
-  private Set<User> userSet;
+  @JsonIdentityReference
+  @JsonIdentityInfo(
+      property = "id",
+      generator = ObjectIdGenerators.PropertyGenerator.class
+  )
+  @EqualsAndHashCode.Exclude
+  private Set<User> userSet = new HashSet<>();
 
-//  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//  @JoinTable(
-//      name = "users_set",
-//      joinColumns = @JoinColumn(name = "sub_user_id"),
-//      inverseJoinColumns = @JoinColumn(name = "user_id")
-//  )
-//  private Set<User> subUserSet;
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinTable(
+      name = "users_set",
+      joinColumns = @JoinColumn(name = "sub_user_id"),
+      inverseJoinColumns = @JoinColumn(name = "user_id")
+  )
+  @JsonIdentityReference
+  @JsonIdentityInfo(
+      property = "id",
+      generator = ObjectIdGenerators.PropertyGenerator.class
+  )
+  @EqualsAndHashCode.Exclude
+  private Set<User> subUserSet = new HashSet<>();
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)

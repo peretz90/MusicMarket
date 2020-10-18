@@ -2,6 +2,7 @@ package by.peretz90.musicmarket.Controller;
 
 import by.peretz90.musicmarket.Domain.User;
 import by.peretz90.musicmarket.Domain.UserRole;
+import by.peretz90.musicmarket.Repository.UserRepo;
 import by.peretz90.musicmarket.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,7 @@ import java.util.Set;
 public class UserRestController {
 
   public final UserService userService;
+  public final UserRepo userRepo;
 
   @GetMapping
   public List<User> user() {
@@ -85,12 +87,12 @@ public class UserRestController {
     return userService.subscribeUser(user, username);
   }
 
-  @PostMapping("/profile/unsubscribe")
-  public User unsubscribeUser(
+  @DeleteMapping("/profile/unsubscribe")
+  public void unsubscribeUser(
       @AuthenticationPrincipal User user,
       @RequestParam("username") String username
   ) {
-    return userService.unsubscribeUser(user, username);
+    userService.unsubscribeUser(user, username);
   }
 
   @GetMapping("/profile/subscriptions")
