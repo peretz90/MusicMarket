@@ -1,7 +1,7 @@
 package by.peretz90.musicmarket.Domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,9 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -23,7 +25,7 @@ import java.util.Set;
 @Table(name = "users")
 @Data
 @ToString
-public class User extends AbstractEntity implements UserDetails {
+public class User extends AbstractEntity implements UserDetails, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,27 +55,13 @@ public class User extends AbstractEntity implements UserDetails {
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "sub_user_id")
   )
-  @JsonIdentityReference
+  @JsonManagedReference
   @JsonIdentityInfo(
       property = "id",
       generator = ObjectIdGenerators.PropertyGenerator.class
   )
   @EqualsAndHashCode.Exclude
-  private Set<User> userSet = new HashSet<>();
-
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinTable(
-      name = "users_set",
-      joinColumns = @JoinColumn(name = "sub_user_id"),
-      inverseJoinColumns = @JoinColumn(name = "user_id")
-  )
-  @JsonIdentityReference
-  @JsonIdentityInfo(
-      property = "id",
-      generator = ObjectIdGenerators.PropertyGenerator.class
-  )
-  @EqualsAndHashCode.Exclude
-  private Set<User> subUserSet = new HashSet<>();
+  private List<User> userSet;
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)

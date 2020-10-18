@@ -90,6 +90,8 @@ Vue.component('user-info', {
     </div>
   `,
   created() {
+    this.subscriptionUsers = [];
+    this.subscribeUsers = [];
     getUserApi.get({id: this.id}).then(r =>
       r.json().then(data => this.user = data)
     );

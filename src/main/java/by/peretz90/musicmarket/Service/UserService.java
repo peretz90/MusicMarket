@@ -3,6 +3,7 @@ package by.peretz90.musicmarket.Service;
 import by.peretz90.musicmarket.Domain.User;
 import by.peretz90.musicmarket.Domain.UserRole;
 import by.peretz90.musicmarket.Repository.UserRepo;
+import com.fasterxml.jackson.core.JsonParseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -131,25 +132,23 @@ public class UserService implements UserDetailsService {
     return user;
   }
 
-  public Set<User> subscribersUsers(User user) {
-//    return userRepo.findAll().stream().filter(user1 -> user1.getUserSet().contains(user)).collect(Collectors.toList());
-    return user.getSubUserSet();
+  public List<User> subscribersUsers(User user) {
+    return userRepo.findAll().stream().filter(user1 -> user1.getUserSet().contains(user)).collect(Collectors.toList());
   }
 
-  public Set<User> subscriptionsUsers(User user) {
+  public List<User> subscriptionsUsers(User user) {
     return user.getUserSet();
   }
 
-  public synchronized User subscribeUser(User user, String username) {
+  public User subscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
-    userId.getSubUserSet().add(user);
-    System.out.println(userId);
-    return userRepo.save(userId);
+    user.getUserSet().add(userId);
+    return userRepo.save(user);
   }
 
-  public synchronized void unsubscribeUser(User user, String username) {
+  public void unsubscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
-    userId.getSubUserSet().remove(user);
-    userRepo.save(userId);
+    user.getUserSet().remove(userId);
+    userRepo.save(user);
   }
 }
