@@ -1,4 +1,4 @@
-package by.peretz90.musicmarket.Domain;
+package by.peretz90.musicmarket.domain;
 
 
 import org.springframework.security.core.GrantedAuthority;

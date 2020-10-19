@@ -1,10 +1,8 @@
-package by.peretz90.musicmarket.Service;
+package by.peretz90.musicmarket.service;
 
-import by.peretz90.musicmarket.Domain.Subscribers;
-import by.peretz90.musicmarket.Domain.User;
-import by.peretz90.musicmarket.Domain.UserRole;
-import by.peretz90.musicmarket.Repository.SubscribersRepo;
-import by.peretz90.musicmarket.Repository.UserRepo;
+import by.peretz90.musicmarket.domain.User;
+import by.peretz90.musicmarket.domain.UserRole;
+import by.peretz90.musicmarket.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-  public final SubscribersRepo subscribersRepo;
   public final UserRepo userRepo;
   public final PasswordEncoder passwordEncoder;
   public final MailSenderService mailSenderService;
@@ -136,25 +133,27 @@ public class UserService implements UserDetailsService {
 
   public Set<User> subscribersUsers(User user) {
 //    return userRepo.findAll().stream().filter(user1 -> user1.getUserSet().contains(user)).collect(Collectors.toList());
-    return user.getUserSubSet();
+    return user.getSubscribers();
   }
 
   public Set<User> subscriptionsUsers(User user) {
-    return user.getUserSet();
+    return user.getSubscriptions();
   }
 
-  public synchronized User subscribeUser(User user, String username) {
+  public User subscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
-    Subscribers subscribers = new Subscribers();
-    subscribers.setUserId(user);
-    subscribers.setUserSub(userId);
-    subscribersRepo.save(subscribers);
+    userId.getSubscribers().add(user);
+    userRepo.save(userId);
     return user;
   }
 
   public void unsubscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
-    Subscribers subscribers = subscribersRepo.findByUserIdAndUserSub(user, userId);
-    subscribersRepo.delete(subscribers);
+    userId.getSubscribers().remove(user);
+    userRepo.save(userId);
+  }
+
+  public boolean getIsSubscribers(User user, User userId) {
+    return userId.getSubscribers().contains(user);
   }
 }

@@ -3,6 +3,7 @@ const editProfileApi = Vue.resource('/user/profile{/id}');
 const subscribersApi = Vue.resource('/user/profile/subscribers');
 const subscriptionsApi = Vue.resource('/user/profile/subscriptions');
 const unsubscribeApi = Vue.resource('/user/profile/unsubscribe');
+const isSubscribersApi = Vue.resource('/user/profile/is_subscribers{/id}');
 
 let getIndex = (list, id) => {
   for (let i = 0; i < list.length; i++) {
@@ -13,6 +14,15 @@ let getIndex = (list, id) => {
   return -1;
 }
 
+let isSubscriptions = (user, userList) => {
+  for (let i = 0; i < userList.length; i++) {
+    if (user.id === userList[i].id) {
+      return true;
+    }
+  }
+  return false;
+}
+
 Vue.component('user-info', {
   props: ['id', 'auth'],
   data: () => ({
@@ -21,7 +31,8 @@ Vue.component('user-info', {
     inputModalEmail: false,
     inputModalProfile: false,
     subscribeUsers: [],
-    subscriptionUsers: []
+    subscriptionUsers: [],
+    isSub: false
   }),
   template: `
     <div v-if="this.user != null" class="col-7 mx-auto">
@@ -47,8 +58,8 @@ Vue.component('user-info', {
       </div>
       <div>
         <div v-if="this.user.username == this.auth">
-          <a href="/users/profile/subscribers" class="btn btn-outline-info">Subscribers <strong>{{ subscribeUsers.length }}</strong></a>
-          <a href="/users/profile/subscriptions" class="btn btn-outline-secondary">Subscriptions <strong>{{ subscriptionUsers.length }}</strong></a>
+          <a href="/users/profile/subscribers" class="btn btn-outline-info">Subscribers <strong>{{ this.subscribeUsers.length }}</strong></a>
+          <a href="/users/profile/subscriptions" class="btn btn-outline-secondary">Subscriptions <strong>{{ this.subscriptionUsers.length }}</strong></a>
         </div>
         <div v-else>
           <button v-if="!isSub" type="button" class="btn btn-info" @click.prevent="subscribe">Subscribers</button>
@@ -92,15 +103,22 @@ Vue.component('user-info', {
   created() {
     this.subscriptionUsers = [];
     this.subscribeUsers = [];
-    getUserApi.get({id: this.id}).then(r =>
-      r.json().then(data => this.user = data)
-    );
+    getUserApi.get({id: this.id}).then(r => {
+      if (r.ok) {
+        r.json().then(data => this.user = data)
+      }
+    });
     subscribersApi.get().then(r =>
       r.json().then(data => data.forEach(user => this.subscribeUsers.push(user)))
     );
     subscriptionsApi.get().then(r =>
-      r.json().then(data => data.forEach(user => this.subscriptionUsers.push(user)))
+      r.json().then(data => {
+        data.forEach(user => this.subscriptionUsers.push(user))
+      })
     );
+    isSubscribersApi.get({id: this.id}).then(r =>
+      r.json().then(data => this.isSub = data)
+    )
   },
   methods: {
     editEmail() {
@@ -133,29 +151,25 @@ Vue.component('user-info', {
     subscribe() {
       let data = new FormData();
       data.append("username", this.user.username);
-      subscribersApi.save({}, data).then(r =>
-        r.json().then(data => this.subscriptionUsers.push(data))
-      );
+      subscribersApi.save({}, data).then(r => {
+        if (r.ok) {
+          r.json().then(data => {
+            this.subscriptionUsers.push(data);
+          });
+          this.isSub = true;
+        }
+      });
     },
     unsubscribe() {
       let data = new FormData();
       data.append("username", this.user.username);
       let index = getIndex(this.subscriptionUsers, this.id);
-      unsubscribeApi.remove({}, data).then(r => {
+      unsubscribeApi.save({}, data).then(r => {
         if (r.ok) {
           this.subscriptionUsers.splice(index, 1);
+          this.isSub = false;
         }
       });
-    }
-  },
-  computed: {
-    isSub() {
-      for (let user of this.subscriptionUsers) {
-        if (user.id === this.user.id) {
-          return true;
-        }
-      }
-      return false;
     }
   }
 });

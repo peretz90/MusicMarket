@@ -1,8 +1,10 @@
-package by.peretz90.musicmarket.Domain;
+package by.peretz90.musicmarket.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,13 +15,13 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = { "id" })
 @Entity
 @Table(name = "users")
 @Data
-@ToString
 public class User extends AbstractEntity implements UserDetails {
 
   @Id
@@ -44,11 +46,31 @@ public class User extends AbstractEntity implements UserDetails {
 
   private boolean active;
 
-  @OneToMany(mappedBy = "userId", targetEntity = Subscribers.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-  private Set<User> userSet;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "user_subscriptions",
+      joinColumns = @JoinColumn(name = "subscriber_id"),
+      inverseJoinColumns = @JoinColumn(name = "channel_id")
+  )
+  @JsonIdentityReference
+  @JsonIdentityInfo(
+      property = "id",
+      generator = ObjectIdGenerators.PropertyGenerator.class
+  )
+  private Set<User> subscriptions = new HashSet<>();
 
-  @OneToMany(mappedBy = "userSub", targetEntity = Subscribers.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-  private Set<User> userSubSet;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "user_subscriptions",
+      joinColumns = @JoinColumn(name = "channel_id"),
+      inverseJoinColumns = @JoinColumn(name = "subscriber_id")
+  )
+  @JsonIdentityReference
+  @JsonIdentityInfo(
+      property = "id",
+      generator = ObjectIdGenerators.PropertyGenerator.class
+  )
+  private Set<User> subscribers = new HashSet<>();
 
   @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
   @Enumerated(EnumType.STRING)

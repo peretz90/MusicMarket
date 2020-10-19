@@ -1,8 +1,8 @@
-package by.peretz90.musicmarket.Service;
+package by.peretz90.musicmarket.service;
 
-import by.peretz90.musicmarket.Domain.Music;
-import by.peretz90.musicmarket.Domain.User;
-import by.peretz90.musicmarket.Repository.MusicRepo;
+import by.peretz90.musicmarket.domain.Music;
+import by.peretz90.musicmarket.domain.User;
+import by.peretz90.musicmarket.repository.MusicRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

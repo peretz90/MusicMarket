@@ -1,4 +1,4 @@
-package by.peretz90.musicmarket.Config;
+package by.peretz90.musicmarket.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

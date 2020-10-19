@@ -1,8 +1,8 @@
-package by.peretz90.musicmarket.Controller;
+package by.peretz90.musicmarket.controller;
 
-import by.peretz90.musicmarket.Domain.Music;
-import by.peretz90.musicmarket.Domain.User;
-import by.peretz90.musicmarket.Service.MusicService;
+import by.peretz90.musicmarket.domain.Music;
+import by.peretz90.musicmarket.domain.User;
+import by.peretz90.musicmarket.service.MusicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

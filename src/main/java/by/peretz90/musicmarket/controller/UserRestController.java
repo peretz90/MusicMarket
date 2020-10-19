@@ -1,9 +1,9 @@
-package by.peretz90.musicmarket.Controller;
+package by.peretz90.musicmarket.controller;
 
-import by.peretz90.musicmarket.Domain.User;
-import by.peretz90.musicmarket.Domain.UserRole;
-import by.peretz90.musicmarket.Repository.UserRepo;
-import by.peretz90.musicmarket.Service.UserService;
+import by.peretz90.musicmarket.domain.User;
+import by.peretz90.musicmarket.domain.UserRole;
+import by.peretz90.musicmarket.repository.UserRepo;
+import by.peretz90.musicmarket.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -79,6 +79,14 @@ public class UserRestController {
     return userService.subscribersUsers(user);
   }
 
+  @GetMapping("/profile/is_subscribers/{id}")
+  public boolean isSubscribers(
+      @AuthenticationPrincipal User user,
+      @PathVariable("id") User userId
+  ) {
+    return userService.getIsSubscribers(user, userId);
+  }
+
   @PostMapping("/profile/subscribers")
   public User subscribeUser(
       @AuthenticationPrincipal User user,
@@ -87,7 +95,7 @@ public class UserRestController {
     return userService.subscribeUser(user, username);
   }
 
-  @DeleteMapping("/profile/unsubscribe")
+  @PostMapping("/profile/unsubscribe")
   public void unsubscribeUser(
       @AuthenticationPrincipal User user,
       @RequestParam("username") String username

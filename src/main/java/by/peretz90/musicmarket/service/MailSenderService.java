@@ -1,4 +1,4 @@
-package by.peretz90.musicmarket.Service;
+package by.peretz90.musicmarket.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

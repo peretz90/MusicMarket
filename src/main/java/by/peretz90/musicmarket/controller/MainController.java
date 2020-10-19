@@ -1,8 +1,8 @@
-package by.peretz90.musicmarket.Controller;
+package by.peretz90.musicmarket.controller;
 
-import by.peretz90.musicmarket.Repository.UserRepo;
-import by.peretz90.musicmarket.Service.MusicService;
-import by.peretz90.musicmarket.Service.UserService;
+import by.peretz90.musicmarket.repository.UserRepo;
+import by.peretz90.musicmarket.service.MusicService;
+import by.peretz90.musicmarket.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;

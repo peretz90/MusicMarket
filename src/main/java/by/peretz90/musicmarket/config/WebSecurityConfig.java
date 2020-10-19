@@ -1,6 +1,6 @@
-package by.peretz90.musicmarket.Config;
+package by.peretz90.musicmarket.config;
 
-import by.peretz90.musicmarket.Service.UserService;
+import by.peretz90.musicmarket.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
