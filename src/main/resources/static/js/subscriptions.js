@@ -30,22 +30,26 @@ Vue.component("user-row", {
 new Vue({
   el: '#subscriptions',
   data: () => ({
-    subscriptionsUser: []
+    subscriptionsUser: [],
+    countSub: 0
   }),
   template: `
     <div class="col-6 mx-auto mt-4" v-if="isEmpty">
       <h3>You are not currently subscribed to anyone</h3>
     </div>
-    <div v-else>
-      <div style="background: #f6f6f6; height: 45px;" class="col-6 mx-auto my-2" v-for="user in this.subscriptionsUser">
+    <div v-else class="col-6 mx-auto">
+      <h4 class="text-center my-5">{{ countSub }} subscriptions</h4>
+      <div style="background: #f6f6f6; height: 45px;" class="my-2" v-for="user in this.subscriptionsUser">
         <user-row :user="user"></user-row>
       </div>
     </div>
   `,
   created() {
-    console.log(this.subscriptionsUser);
     subscriptionsApi.get().then(r =>
-      r.json().then(data => data.forEach(user => this.subscriptionsUser.push(user)))
+      r.json().then(data => {
+        data.forEach(user => this.subscriptionsUser.push(user));
+        this.countSub = this.subscriptionsUser.length;
+      })
     )
   },
   computed: {

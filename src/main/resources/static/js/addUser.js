@@ -44,8 +44,10 @@ Vue.component('user-form', {
           <div class="invalid-feedback">{{ messagePassword }}</div>
         </div>
         <input type="date" name="birthday" class="form-control" />
-        <input v-if="validEmail && validPassword" type="button" @click.prevent="save" class="btn btn-info" value="add user" />
-        <input v-if="!validEmail || !validPassword" type="button" class="btn btn-info" value="add user" disabled />
+        <div style="width: 100%" class="d-flex mt-3">
+          <input v-if="validEmail && validPassword" type="button" @click.prevent="save" class="btn btn-info ml-auto" value="add user" />
+          <input v-if="!validEmail || !validPassword" type="button" class="btn btn-info ml-auto" value="add user" disabled />
+        </div>
       </form>
     </div>
   `,

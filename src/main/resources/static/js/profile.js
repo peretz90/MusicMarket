@@ -106,8 +106,6 @@ Vue.component('user-info', {
         r.json().then(data => {
           this.user = data;
           this.isSub = containsUser(data, this.subscriptionUsers);
-          console.log(data);
-          console.log(this.subscriptionUsers);
         })
       }
     });

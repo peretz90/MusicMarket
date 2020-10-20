@@ -3,13 +3,11 @@
 <head th:replace="commons/fragments :: headers"></head>
 <body>
 <div th:replace="commons/fragments :: navbar"></div>
-<div id="add">
+<div id="add" style="width: 500px" class="mx-auto mt-5">
   <user-form></user-form>
-  <div>
-    With Google: <a href="/oauth2/authorization/google">login</a>
-  </div>
-  <div>
-    With Facebook: <a href="/oauth2/authorization/facebook">login</a>
+  <div class="d-flex">
+    <a class="m-auto" href="/oauth2/authorization/google"><img src="/static/image/Signup-with-Google.jpg" alt="google"></a>
+    <a class="m-auto" href="/oauth2/authorization/facebook"><img src="/static/image/Signup-with-Facebook.jpg" alt="facebook"></a>
   </div>
 </div>
 <script src="/static/js/addUser.js"></script>
