@@ -88,11 +88,11 @@ public class UserRestController {
   }
 
   @PostMapping("/profile/subscribers")
-  public User subscribeUser(
+  public void subscribeUser(
       @AuthenticationPrincipal User user,
       @RequestParam("username") String username
   ) {
-    return userService.subscribeUser(user, username);
+    userService.subscribeUser(user, username);
   }
 
   @PostMapping("/profile/unsubscribe")

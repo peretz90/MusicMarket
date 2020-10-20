@@ -5,24 +5,6 @@ const subscriptionsApi = Vue.resource('/user/profile/subscriptions');
 const unsubscribeApi = Vue.resource('/user/profile/unsubscribe');
 const isSubscribersApi = Vue.resource('/user/profile/is_subscribers{/id}');
 
-let getIndex = (list, id) => {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].id === id) {
-      return i;
-    }
-  }
-  return -1;
-}
-
-let isSubscriptions = (user, userList) => {
-  for (let i = 0; i < userList.length; i++) {
-    if (user.id === userList[i].id) {
-      return true;
-    }
-  }
-  return false;
-}
-
 Vue.component('user-info', {
   props: ['id', 'auth'],
   data: () => ({
@@ -58,8 +40,8 @@ Vue.component('user-info', {
       </div>
       <div>
         <div v-if="this.user.username == this.auth">
-          <a href="/users/profile/subscribers" class="btn btn-outline-info">Subscribers <strong>{{ this.subscribeUsers.length }}</strong></a>
-          <a href="/users/profile/subscriptions" class="btn btn-outline-secondary">Subscriptions <strong>{{ this.subscriptionUsers.length }}</strong></a>
+          <a href="/users/profile/subscribers" class="btn btn-outline-info">Subscribers <strong>{{ subscribeUsers.length }}</strong></a>
+          <a href="/users/profile/subscriptions" class="btn btn-outline-secondary">Subscriptions <strong>{{ subscriptionUsers.length }}</strong></a>
         </div>
         <div v-else>
           <button v-if="!isSub" type="button" class="btn btn-info" @click.prevent="subscribe">Subscribers</button>
@@ -101,8 +83,8 @@ Vue.component('user-info', {
     </div>
   `,
   created() {
-    this.subscriptionUsers = [];
     this.subscribeUsers = [];
+    this.subscriptionUsers = [];
     getUserApi.get({id: this.id}).then(r => {
       if (r.ok) {
         r.json().then(data => this.user = data)
@@ -117,7 +99,9 @@ Vue.component('user-info', {
       })
     );
     isSubscribersApi.get({id: this.id}).then(r =>
-      r.json().then(data => this.isSub = data)
+      r.json().then(data => {
+        this.isSub = data;
+      })
     )
   },
   methods: {
@@ -153,9 +137,6 @@ Vue.component('user-info', {
       data.append("username", this.user.username);
       subscribersApi.save({}, data).then(r => {
         if (r.ok) {
-          r.json().then(data => {
-            this.subscriptionUsers.push(data);
-          });
           this.isSub = true;
         }
       });
@@ -163,10 +144,8 @@ Vue.component('user-info', {
     unsubscribe() {
       let data = new FormData();
       data.append("username", this.user.username);
-      let index = getIndex(this.subscriptionUsers, this.id);
       unsubscribeApi.save({}, data).then(r => {
         if (r.ok) {
-          this.subscriptionUsers.splice(index, 1);
           this.isSub = false;
         }
       });
