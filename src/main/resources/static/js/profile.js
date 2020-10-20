@@ -3,7 +3,15 @@ const editProfileApi = Vue.resource('/user/profile{/id}');
 const subscribersApi = Vue.resource('/user/profile/subscribers');
 const subscriptionsApi = Vue.resource('/user/profile/subscriptions');
 const unsubscribeApi = Vue.resource('/user/profile/unsubscribe');
-const isSubscribersApi = Vue.resource('/user/profile/is_subscribers{/id}');
+
+let containsUser = (user, userList) => {
+  for (let u of userList) {
+    if (u.id === user.id) {
+      return true;
+    }
+  }
+  return false;
+}
 
 Vue.component('user-info', {
   props: ['id', 'auth'],
@@ -85,24 +93,24 @@ Vue.component('user-info', {
   created() {
     this.subscribeUsers = [];
     this.subscriptionUsers = [];
-    getUserApi.get({id: this.id}).then(r => {
-      if (r.ok) {
-        r.json().then(data => this.user = data)
-      }
-    });
     subscribersApi.get().then(r =>
       r.json().then(data => data.forEach(user => this.subscribeUsers.push(user)))
     );
     subscriptionsApi.get().then(r =>
       r.json().then(data => {
-        data.forEach(user => this.subscriptionUsers.push(user))
+        data.forEach(user => this.subscriptionUsers.push(user));
       })
     );
-    isSubscribersApi.get({id: this.id}).then(r =>
-      r.json().then(data => {
-        this.isSub = data;
-      })
-    )
+    getUserApi.get({id: this.id}).then(r => {
+      if (r.ok) {
+        r.json().then(data => {
+          this.user = data;
+          this.isSub = containsUser(data, this.subscriptionUsers);
+          console.log(data);
+          console.log(this.subscriptionUsers);
+        })
+      }
+    });
   },
   methods: {
     editEmail() {

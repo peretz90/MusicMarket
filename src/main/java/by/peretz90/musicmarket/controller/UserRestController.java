@@ -79,14 +79,6 @@ public class UserRestController {
     return userService.subscribersUsers(user);
   }
 
-  @GetMapping("/profile/is_subscribers/{id}")
-  public boolean isSubscribers(
-      @AuthenticationPrincipal User user,
-      @PathVariable("id") User userId
-  ) {
-    return userService.getIsSubscribers(user, userId);
-  }
-
   @PostMapping("/profile/subscribers")
   public void subscribeUser(
       @AuthenticationPrincipal User user,

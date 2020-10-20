@@ -132,12 +132,10 @@ public class UserService implements UserDetailsService {
   }
 
   public Set<User> subscribersUsers(User user) {
-//    return userRepo.findAll().stream().filter(user1 -> user1.getSubscriptions().contains(user)).collect(Collectors.toSet());
     return user.getSubscribers();
   }
 
   public Set<User> subscriptionsUsers(User user) {
-//    return userRepo.findAll().stream().filter(user1 -> user1.getSubscribers().contains(user)).collect(Collectors.toSet());
     return user.getSubscriptions();
   }
 
@@ -153,7 +151,4 @@ public class UserService implements UserDetailsService {
     userRepo.save(user);
   }
 
-  public boolean getIsSubscribers(User user, User userId) {
-    return userId.getSubscribers().contains(user);
-  }
 }
