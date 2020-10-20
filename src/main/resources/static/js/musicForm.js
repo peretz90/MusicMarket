@@ -6,6 +6,10 @@ let isMusicDat = (name) => {
   return lastStr === 'mp3' || lastStr === 'wav' || lastStr === 'ogg';
 }
 
+let splitText = (str) => {
+  return str.split('\\').pop().split('/').pop();
+}
+
 Vue.component('music-form', {
   data: () => ({
     message: 'All fields are required',
@@ -15,18 +19,25 @@ Vue.component('music-form', {
     },
     nameMusic: '',
     isName: false,
-    isFile: false
+    isFile: false,
+    file: undefined,
+    fileLabel: 'Choose file'
   }),
   template: `
     <div class="col-5 mx-auto mt-4">
       <form class="form-group" enctype="multipart/form-data" id="music">
-        <input type="text" name="name" placeholder="Name music" class="form-control" v-model="nameMusic" />
-        <input type="file" name="file" class="form-control-file" @change="fileMusic" id="file" />
-        <input v-if="isName && isFile" type="button" class="btn btn-info" value="Add music" @click.prevent="addMusic" />
-        <input v-if="!isName || !isFile" type="button" class="btn btn-info" value="Add music" disabled />
+        <input type="text" name="name" placeholder="Name music" class="form-control my-2" v-model="nameMusic" />
+        <div class="input-group">
+          <div class="custom-file">
+            <input type="file" name="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
+            <label class="custom-file-label" for="inputGroupFile01">{{ fileLabel }}</label>
+          </div>
+        </div>
+        <input v-if="isName && isFile" type="button" class="btn btn-info my-2 form-control" value="Add music" @click.prevent="addMusic" />
+        <input v-if="!isName || !isFile" type="button" class="btn btn-info my-2 form-control" value="Add music" disabled />
       </form>
-      <div>
-        <span :class="alertMessage">{{ message }}</span>
+      <div class="w-100 my-2 text-center" :class="alertMessage">
+        <span>{{ message }}</span>
       </div>
     </div>
   `,
@@ -79,12 +90,14 @@ Vue.component('music-form', {
           }
           setTimeout(() => {
             this.nameMusic = '';
+            this.fileLabel = 'Choose file'
           }, 3 * 1000);
         }
       })
     },
     fileMusic() {
-      let value = document.getElementById('file').value;
+      this.fileLabel = splitText(this.file.value);
+      let value = this.file.value;
       if (value !== '') {
         if (isMusicDat(value)) {
           this.isFile = true;
@@ -125,6 +138,10 @@ Vue.component('music-form', {
         }
       }
     }
+  },
+  mounted() {
+    this.file = this.$el.querySelector('#inputGroupFile01');
+    this.file.addEventListener('change', this.fileMusic);
   }
 });
 

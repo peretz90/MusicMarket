@@ -3,16 +3,14 @@
 <head th:replace="commons/fragments :: headers"></head>
 <body>
 <div th:replace="commons/fragments :: navbar"></div>
-  <form method="post" action="/login">
-    <input type="email" name="username" />
-    <input type="password" name="password" />
-    <button type="submit">Login</button>
+  <form class="form-group col-5 mx-auto mt-5" method="post" action="/login">
+    <input class="form-control my-2" type="email" name="username" />
+    <input class="form-control my-2" type="password" name="password" />
+    <div class="d-flex my-2"><button class="ml-auto btn btn-info" type="submit">Login</button></div>
   </form>
-  <div>
-    With Google: <a href="/oauth2/authorization/google">login</a>
-  </div>
-  <div>
-    With Facebook: <a href="/oauth2/authorization/facebook">login</a>
+  <div class="d-flex col-5 mx-auto mt-3">
+    <a class="m-auto" href="/oauth2/authorization/google"><img src="/static/image/Signup-with-Google.jpg" alt="google"></a>
+    <a class="m-auto" href="/oauth2/authorization/facebook"><img src="/static/image/Signup-with-Facebook.jpg" alt="facebook"></a>
   </div>
 </body>
 </html>
