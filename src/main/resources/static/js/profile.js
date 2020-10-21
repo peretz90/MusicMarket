@@ -141,7 +141,7 @@ Vue.component('user-info', {
     subscribe() {
       let data = new FormData();
       data.set("username", this.user.username);
-      subscribersApi.save({}, data).then(r => {
+      subscribersApi.update({}, data).then(r => {
         if (r.ok) {
           this.isSub = true;
         }
@@ -150,7 +150,7 @@ Vue.component('user-info', {
     unsubscribe() {
       let data = new FormData();
       data.set("username", this.user.username);
-      unsubscribeApi.save({}, data).then(r => {
+      unsubscribeApi.update({}, data).then(r => {
         if (r.ok) {
           this.isSub = false;
         }

@@ -74,7 +74,7 @@ public class UserRestController {
     return userService.subscribersUsers(user);
   }
 
-  @PostMapping("/profile/subscribers")
+  @PutMapping("/profile/subscribers")
   public void subscribeUser(
       @AuthenticationPrincipal User user,
       @RequestParam("username") String username
@@ -82,7 +82,7 @@ public class UserRestController {
     userService.subscribeUser(user, username);
   }
 
-  @PostMapping("/profile/unsubscribe")
+  @PutMapping("/profile/unsubscribe")
   public void unsubscribeUser(
       @AuthenticationPrincipal User user,
       @RequestParam("username") String username

@@ -55,7 +55,7 @@ Vue.component("user-row", {
     unsubscribe() {
       let data = new FormData();
       data.append("username", this.user.username);
-      unsubscribeApi.save({}, data).then(r => {
+      unsubscribeApi.update({}, data).then(r => {
         if (r.ok) {
           this.$store.commit('decrementCount');
           this.$store.commit('deleteUser', this.user.id);

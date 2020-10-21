@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,7 +22,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
-public class User extends AbstractEntity implements UserDetails {
+public class User extends AbstractEntity implements UserDetails, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +46,7 @@ public class User extends AbstractEntity implements UserDetails {
 
   private boolean active;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   @JoinTable(
       name = "user_subscriptions",
       joinColumns = @JoinColumn(name = "subscriber_id"),
@@ -58,7 +59,7 @@ public class User extends AbstractEntity implements UserDetails {
   )
   private Set<User> subscriptions = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   @JoinTable(
       name = "user_subscriptions",
       joinColumns = @JoinColumn(name = "channel_id"),
