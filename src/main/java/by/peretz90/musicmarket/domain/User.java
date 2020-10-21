@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -46,7 +45,7 @@ public class User extends AbstractEntity implements UserDetails {
 
   private boolean active;
 
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(
       name = "user_subscriptions",
       joinColumns = @JoinColumn(name = "subscriber_id"),
@@ -59,7 +58,7 @@ public class User extends AbstractEntity implements UserDetails {
   )
   private Set<User> subscriptions = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(
       name = "user_subscriptions",
       joinColumns = @JoinColumn(name = "channel_id"),

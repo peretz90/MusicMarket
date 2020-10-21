@@ -37,11 +37,6 @@ public class UserRestController {
     return userService.saveUser(userEdit, user, form);
   }
 
-  @GetMapping("/edit")
-  public User userGetOne(@AuthenticationPrincipal User user) {
-    return user;
-  }
-
   @GetMapping("/roles")
   public UserRole[] roles() {
     return UserRole.values();

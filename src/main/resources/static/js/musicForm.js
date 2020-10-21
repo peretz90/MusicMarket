@@ -89,9 +89,8 @@ Vue.component('music-form', {
             "alert-success": true
           }
           setTimeout(() => {
-            this.nameMusic = '';
-            this.fileLabel = 'Choose file'
-          }, 3 * 1000);
+            window.location.href = '/musics/add'
+          }, 2 * 1000);
         }
       })
     },

@@ -141,14 +141,18 @@ public class UserService implements UserDetailsService {
 
   public void subscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
+//    userId.getSubscribers().add(user);
     user.getSubscriptions().add(userId);
+//    userRepo.save(userId);
     userRepo.save(user);
   }
 
   public void unsubscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
+//    userId.getSubscribers().remove(user);
     user.getSubscriptions().remove(userId);
     userRepo.save(user);
+//    userRepo.save(userId);
   }
 
 }

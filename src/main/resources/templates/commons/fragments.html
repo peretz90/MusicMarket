@@ -19,7 +19,7 @@
     <script src="/static/js/libraries/vue/vue-resource.js"></script>
 </head>
 
-<nav th:fragment="navbar" class="navbar navbar-expand-md bg-dark navbar-dark">
+<nav th:fragment="navbar" class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
     <a class="navbar-brand" href="/">Music Market</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -32,9 +32,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="/musics/add">Add musics</a>
             </li>
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" href="/registration">Registration</a>
-            </li>
             <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
                 <a class="nav-link" href="/users">Users</a>
             </li>
@@ -44,7 +41,8 @@
                 <a th:href="@{'/users/profile/' + ${#authentication.principal.id}}" th:text="${#authentication.principal.username}" class="mr-3 my-auto">Username</a>
                 <a href="/logout" class="btn btn-info">Logged out</a>
             </div>
-            <div sec:authorize="!isAuthenticated()">
+            <div class="d-flex" sec:authorize="!isAuthenticated()">
+                <a href="/registration" class="my-auto mr-3">Registration</a>
                 <a href="/login" class="btn btn-info">Login</a>
             </div>
         </div>
