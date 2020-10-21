@@ -36,6 +36,9 @@ public class User extends AbstractEntity implements UserDetails, Serializable {
   @NotBlank
   private String password;
 
+  @Transient
+  private String confirmPassword;
+
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate birthday;
 

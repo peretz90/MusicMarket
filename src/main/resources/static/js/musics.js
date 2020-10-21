@@ -179,13 +179,15 @@ new Vue({
   template: `
     <div>
       <h3 class="mx-auto" style="width: 500px">Music List</h3>
-      <music-row v-for="music in this.$store.state.musics" 
-          :key="music.id" 
-          :name="music.name" 
-          :url="music.url" 
-          :author="music.userAuthor.username" 
-          :idAuthor="music.userAuthor.id"
-      ></music-row>
+      <div style="margin-bottom: 88px">
+        <music-row v-for="music in this.$store.state.musics" 
+            :key="music.id" 
+            :name="music.name" 
+            :url="music.url" 
+            :author="music.userAuthor.username" 
+            :idAuthor="music.userAuthor.id"
+        ></music-row>
+      </div>
       <music-player url="" class="fixed-bottom w-100 bg-dark text-light d-flex" style="height: 80px"></music-player>
     </div>
   `,

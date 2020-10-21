@@ -31,12 +31,14 @@ public class UserService implements UserDetailsService {
   }
 
   public void addUser(User user) {
-    user.setActivationCode(UUID.randomUUID().toString());
-    user.setActive(false);
-    user.setRoles(Collections.singleton(UserRole.ROLE_USER));
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
-    userRepo.save(user);
-    sendMessage(user);
+    if (user.getPassword().equals(user.getConfirmPassword())) {
+      user.setActivationCode(UUID.randomUUID().toString());
+      user.setActive(false);
+      user.setRoles(Collections.singleton(UserRole.ROLE_USER));
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+      userRepo.save(user);
+      sendMessage(user);
+    }
   }
 
   private void sendMessage(User user){
@@ -96,7 +98,17 @@ public class UserService implements UserDetailsService {
   }
 
   public User saveUser(User userEdit, User user, Map<String, String> form) {
-    BeanUtils.copyProperties(userEdit, user, "id", "username", "password", "active", "roles", "createdDate", "updateDate");
+    BeanUtils.copyProperties(userEdit, user,
+        "id",
+        "username",
+        "password",
+        "active",
+        "roles",
+        "createdDate",
+        "updateDate",
+        "subscriptions",
+        "subscribers"
+    );
     Set<String> roles = Arrays.stream(UserRole.values())
         .map(UserRole::name)
         .collect(Collectors.toSet());

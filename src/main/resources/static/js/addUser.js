@@ -24,11 +24,14 @@ Vue.component('user-form', {
   data: () => ({
     username: '',
     password: '',
+    passwordConf: '',
     disable: false,
     validEmail: false,
-    messageEmail: 'the email field must not be empty',
+    messageEmail: 'The email field must not be empty',
     validPassword: false,
-    messagePassword: 'the password field must not be empty'
+    messagePassword: 'The password field must not be empty',
+    validPasswordConf: false,
+    messagePasswordConf: 'Passwords doesn\'t match'
   }),
   template: `
     <div style="width: 500px">
@@ -43,10 +46,15 @@ Vue.component('user-form', {
           <div class="valid-feedback">{{ messagePassword }}</div>
           <div class="invalid-feedback">{{ messagePassword }}</div>
         </div>
+        <div>
+          <input type="password" name="confirmPassword" class="form-control" :class="validPasswordConfClass" placeholder="Password confirm" v-model="passwordConf" required />
+          <div class="valid-feedback">{{ messagePasswordConf }}</div>
+          <div class="invalid-feedback">{{ messagePasswordConf }}</div>
+        </div>
         <input type="date" name="birthday" class="form-control" />
         <div style="width: 100%" class="d-flex mt-3">
-          <input v-if="validEmail && validPassword" type="button" @click.prevent="save" class="btn btn-info ml-auto" value="add user" />
-          <input v-if="!validEmail || !validPassword" type="button" class="btn btn-info ml-auto" value="add user" disabled />
+          <input v-if="validEmail && validPassword && validPasswordConf" type="button" @click.prevent="save" class="btn btn-info ml-auto" value="Registration" />
+          <input v-else type="button" class="btn btn-info ml-auto" value="Registration" disabled />
         </div>
       </form>
     </div>
@@ -66,6 +74,9 @@ Vue.component('user-form', {
     },
     setMessagePassword(message) {
       this.messagePassword = message
+    },
+    setMessagePasswordConf(message) {
+      this.messagePasswordConf = message
     }
   },
   watch: {
@@ -93,6 +104,15 @@ Vue.component('user-form', {
         this.validPassword = true;
         this.setMessagePassword('The password matches the template');
       }
+    },
+    passwordConf(value) {
+      if (value === this.password) {
+        this.validPasswordConf = true;
+        this.setMessagePasswordConf('Passwords match');
+      } else {
+        this.validPasswordConf = false;
+        this.setMessagePasswordConf('Passwords doesn\'t match');
+      }
     }
   },
   computed: {
@@ -106,6 +126,12 @@ Vue.component('user-form', {
       return {
         'is-valid': this.validPassword,
         'is-invalid': !this.validPassword
+      }
+    },
+    validPasswordConfClass() {
+      return {
+        'is-valid': this.validPasswordConf,
+        'is-invalid': !this.validPasswordConf
       }
     }
   }

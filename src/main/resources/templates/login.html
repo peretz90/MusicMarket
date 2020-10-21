@@ -3,12 +3,12 @@
 <head th:replace="commons/fragments :: headers"></head>
 <body>
 <div th:replace="commons/fragments :: navbar"></div>
-  <form class="form-group col-5 mx-auto mt-5" method="post" action="/login">
+  <form class="form-group mx-auto mt-5" style="width: 500px" method="post" action="/login">
     <input class="form-control my-2" type="email" name="username" />
     <input class="form-control my-2" type="password" name="password" />
-    <div class="d-flex my-2"><button class="ml-auto btn btn-info" type="submit">Login</button></div>
+    <button class="ml-auto btn btn-info form-control my-2" type="submit">Login</button>
   </form>
-  <div class="d-flex col-5 mx-auto mt-3">
+  <div class="d-flex mx-auto mt-3" style="width: 500px;">
     <a class="m-auto" href="/oauth2/authorization/google"><img src="/static/image/Signup-with-Google.jpg" alt="google"></a>
     <a class="m-auto" href="/oauth2/authorization/facebook"><img src="/static/image/Signup-with-Facebook.jpg" alt="facebook"></a>
   </div>
