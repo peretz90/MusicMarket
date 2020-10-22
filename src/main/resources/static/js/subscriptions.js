@@ -69,10 +69,10 @@ new Vue({
   el: '#subscriptions',
   store,
   template: `
-    <div class="col-6 mx-auto mt-4" v-if="isEmpty">
-      <h3>You are not currently subscribed to anyone</h3>
+    <div class="mx-auto mt-4" style="width: 650px" v-if="isEmpty">
+      <h3>You don't subscribe to anyone</h3>
     </div>
-    <div v-else class="col-6 mx-auto">
+    <div v-else class="mx-auto" style="width: 650px">
       <h4 class="text-center my-5">{{ this.$store.state.countSub }} subscriptions</h4>
       <div style="background: #f6f6f6; height: 45px;" class="my-2" v-for="user in this.$store.state.subscriptionsUser">
         <user-row :user="user"></user-row>

@@ -30,7 +30,7 @@ Vue.component('music-form', {
         <div class="input-group">
           <div class="custom-file">
             <input type="file" name="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
-            <label class="custom-file-label" for="inputGroupFile01">{{ fileLabel }}</label>
+            <label class="custom-file-label" style="overflow: hidden" for="inputGroupFile01">{{ fileLabel }}</label>
           </div>
         </div>
         <input v-if="isName && isFile" type="button" class="btn btn-info my-2 form-control" value="Add music" @click.prevent="addMusic" />

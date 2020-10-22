@@ -3,7 +3,9 @@
 <div th:replace="commons/fragments.html :: headers"></div>
 <body>
 <div th:replace="commons/fragments.html :: navbar"></div>
-<div id="subscribers"></div>
+<div id="subscribers">
+  <title-row th:auth="${#authentication.principal.username}"></title-row>
+</div>
 <script src="/static/js/subscribers.js"></script>
 </body>
 </html>
