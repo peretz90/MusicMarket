@@ -1,7 +1,9 @@
 package by.peretz90.musicmarket.service;
 
+import by.peretz90.musicmarket.domain.Music;
 import by.peretz90.musicmarket.domain.User;
 import by.peretz90.musicmarket.domain.UserRole;
+import by.peretz90.musicmarket.repository.MusicRepo;
 import by.peretz90.musicmarket.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +15,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -25,6 +28,7 @@ public class UserService implements UserDetailsService {
   public final UserRepo userRepo;
   public final PasswordEncoder passwordEncoder;
   public final MailSenderService mailSenderService;
+  public final MusicRepo musicRepo;
 
   public List<User> users() {
     return userRepo.findAll();
@@ -36,6 +40,7 @@ public class UserService implements UserDetailsService {
       user.setActive(false);
       user.setRoles(Collections.singleton(UserRole.ROLE_USER));
       user.setPassword(passwordEncoder.encode(user.getPassword()));
+      user.setMoney(new BigDecimal("0.00"));
       userRepo.save(user);
       sendMessage(user);
     }
@@ -107,7 +112,9 @@ public class UserService implements UserDetailsService {
         "createdDate",
         "updateDate",
         "subscriptions",
-        "subscribers"
+        "subscribers",
+        "buyingMusic",
+        "money"
     );
     Set<String> roles = Arrays.stream(UserRole.values())
         .map(UserRole::name)
@@ -156,15 +163,22 @@ public class UserService implements UserDetailsService {
     userId.getSubscribers().add(user);
     user.getSubscriptions().add(userId);
     userRepo.save(userId);
-//    userRepo.save(user);
   }
 
   public void unsubscribeUser(User user, String username) {
     User userId = userRepo.findByUsername(username);
     userId.getSubscribers().remove(user);
     user.getSubscriptions().remove(userId);
-//    userRepo.save(user);
     userRepo.save(userId);
   }
 
+  public Set<Music> getAuthArr(User user) {
+    return user.getBuyingMusic();
+  }
+
+  public void removeBuyer(User user, Music music) {
+    music.getBuyers().remove(user);
+    user.getBuyingMusic().remove(music);
+    userRepo.save(user);
+  }
 }

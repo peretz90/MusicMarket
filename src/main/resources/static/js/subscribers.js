@@ -66,7 +66,7 @@ Vue.component('user-row', {
   methods: {
     unsubscribe() {
       let data = new FormData();
-      data.append("username", this.user.username);
+      data.set("username", this.user.username);
       unsubscribeApi.update({}, data).then(r => {
         if (r.ok) {
           this.$store.commit('removeSub', this.user.id);

@@ -18,6 +18,8 @@ Vue.component('music-form', {
       "alert-warning": true
     },
     nameMusic: '',
+    priceMusic: '',
+    isPrice: false,
     isName: false,
     isFile: false,
     file: undefined,
@@ -33,8 +35,9 @@ Vue.component('music-form', {
             <label class="custom-file-label" style="overflow: hidden" for="inputGroupFile01">{{ fileLabel }}</label>
           </div>
         </div>
-        <input v-if="isName && isFile" type="button" class="btn btn-info my-2 form-control" value="Add music" @click.prevent="addMusic" />
-        <input v-if="!isName || !isFile" type="button" class="btn btn-info my-2 form-control" value="Add music" disabled />
+        <input type="number" name="price" class="form-control my-2" :class="validPrice" placeholder="0.00" v-model="priceMusic" />
+        <input v-if="isName && isFile && isPrice" type="button" class="btn btn-info my-2 form-control" value="Add music" @click.prevent="addMusic" />
+        <input v-if="!isName || !isFile || !isPrice" type="button" class="btn btn-info my-2 form-control" value="Add music" disabled />
       </form>
       <div class="w-100 my-2 text-center" :class="alertMessage">
         <span>{{ message }}</span>
@@ -74,6 +77,9 @@ Vue.component('music-form', {
           }
         }
       }
+    },
+    priceMusic(value) {
+      this.isPrice = /[0-9]+\.[0-9]{2}$/.test(value);
     }
   },
   methods: {
@@ -135,6 +141,14 @@ Vue.component('music-form', {
             "alert-warning": true
           }
         }
+      }
+    }
+  },
+  computed: {
+    validPrice() {
+      return {
+        'is-valid': this.isPrice,
+        'is-invalid': !this.isPrice
       }
     }
   },

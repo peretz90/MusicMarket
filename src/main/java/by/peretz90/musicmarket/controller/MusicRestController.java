@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/music")
@@ -28,9 +29,33 @@ public class MusicRestController {
   public void addMusic(
       @AuthenticationPrincipal User user,
       @RequestParam MultipartFile file,
+      @RequestParam String price,
       @Valid Music music
   ) throws IOException {
-    musicService.addMusic(music, file, user);
+    musicService.addMusic(music, price, file, user);
+  }
+
+  @PutMapping("/{id}")
+  public void buyMusic(
+      @AuthenticationPrincipal User user,
+      @PathVariable("id") Music music
+  ) {
+    musicService.buyMusic(user, music);
+  }
+
+  @DeleteMapping("{id}")
+  public void removeMusic(@PathVariable("id") Music music) {
+    musicService.removeMusic(music);
+  }
+
+  @GetMapping("/my-music")
+  public List<Music> listMyMusic(@AuthenticationPrincipal User user) {
+    return musicService.myMusic(user);
+  }
+
+  @GetMapping("/purchased-music")
+  public Set<Music> listPurchasedMusic(@AuthenticationPrincipal User user) {
+    return user.getBuyingMusic();
   }
 
 }

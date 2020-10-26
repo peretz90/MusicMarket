@@ -5,6 +5,23 @@
   <div th:replace="commons/fragments.html :: navbar"></div>
   <div id="profile">
     <user-info th:id="${id}" th:auth="${#authentication.principal.username}"></user-info>
+    <ul class="nav nav-tabs mx-auto mt-5" style="width: 650px">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#myMusic">Your music</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#buyingMusic">Purchased music</a>
+      </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content mx-auto" style="width: 650px">
+      <div class="tab-pane active container" id="myMusic">
+        <musics :musics="myMusics"></musics>
+      </div>
+      <div class="tab-pane container" id="buyingMusic">
+        <musics :musics="buyMusics"></musics>
+      </div>
+    </div>
   </div>
   <script src="/static/js/profile.js"></script>
 </body>

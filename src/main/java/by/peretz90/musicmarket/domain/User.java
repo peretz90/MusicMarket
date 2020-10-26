@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -80,9 +81,20 @@ public class User extends AbstractEntity implements UserDetails, Serializable {
   @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
   private Set<UserRole> roles;
 
-  public boolean isAdmin() {
-    return roles.contains(UserRole.ROLE_ADMIN);
-  }
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @JoinTable(
+      name = "buying_music",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "music_id")
+  )
+  @JsonIdentityReference
+  @JsonIdentityInfo(
+      property = "id",
+      generator = ObjectIdGenerators.PropertyGenerator.class
+  )
+  private Set<Music> buyingMusic = new HashSet<>();
+
+  private BigDecimal money;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

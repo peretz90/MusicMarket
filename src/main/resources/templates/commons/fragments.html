@@ -38,6 +38,7 @@
         </ul>
         <div class="navbar-text">
             <div class="d-flex" sec:authorize="isAuthenticated()">
+                <span id="money" class="mr-3 my-auto" th:text="'$ ' + ${#authentication.principal.money}"></span>
                 <a th:href="@{'/users/profile/' + ${#authentication.principal.id}}" th:text="${#authentication.principal.username}" class="mr-3 my-auto">Username</a>
                 <a href="/logout" class="btn btn-info">Logged out</a>
             </div>

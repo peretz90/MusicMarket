@@ -1,5 +1,6 @@
 package by.peretz90.musicmarket.controller;
 
+import by.peretz90.musicmarket.domain.Music;
 import by.peretz90.musicmarket.domain.User;
 import by.peretz90.musicmarket.domain.UserRole;
 import by.peretz90.musicmarket.repository.UserRepo;
@@ -93,6 +94,24 @@ public class UserRestController {
   @GetMapping("/profile/subscriptions")
   public Set<User> subscriptionsUsers(@AuthenticationPrincipal User user) {
     return userService.subscriptionsUsers(user);
+  }
+
+  @GetMapping("/auth")
+  public User authUser(@AuthenticationPrincipal User user) {
+    return user;
+  }
+
+  @GetMapping("/authArr")
+  public Set<Music> authArrMusic(@AuthenticationPrincipal User user) {
+    return userService.getAuthArr(user);
+  }
+
+  @DeleteMapping("/buying-music/{id}")
+  public void removePurchasedMusic(
+      @AuthenticationPrincipal User user,
+      @PathVariable("id") Music music
+  ) {
+    userService.removeBuyer(user, music);
   }
 
 }

@@ -3,6 +3,7 @@ package by.peretz90.musicmarket.service;
 import by.peretz90.musicmarket.domain.Music;
 import by.peretz90.musicmarket.domain.User;
 import by.peretz90.musicmarket.repository.MusicRepo;
+import by.peretz90.musicmarket.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class MusicService {
 
   public final MusicRepo musicRepo;
+  public final UserRepo userRepo;
 
   @Value("${upload.path}")
   private String uploadPath;
@@ -27,7 +30,7 @@ public class MusicService {
     return musicRepo.findAll();
   }
 
-  public void addMusic(Music music, MultipartFile file, User user) throws IOException {
+  public void addMusic(Music music, String price, MultipartFile file, User user) throws IOException {
     if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
 
       File uploadDirectory = new File(uploadPath);
@@ -40,6 +43,7 @@ public class MusicService {
       file.transferTo(new File(uploadPath + "/" + resultFilename));
       music.setUrl(resultFilename);
       music.setUserAuthor(user);
+      music.setPrice(new BigDecimal(price));
       musicRepo.save(music);
     }
   }
@@ -49,4 +53,25 @@ public class MusicService {
     String fileExtension = originalName.substring(index);
     return toName + fileExtension;
   }
+
+  public void buyMusic(User user, Music music) {
+    if (user.getMoney().compareTo(music.getPrice()) >= 0) {
+      user.setMoney(user.getMoney().subtract(music.getPrice()));
+      userRepo.save(user);
+      music.getUserAuthor().setMoney(music.getUserAuthor().getMoney().add(music.getPrice()));
+      music.getBuyers().add(user);
+      user.getBuyingMusic().add(music);
+      musicRepo.save(music);
+    }
+  }
+
+  public List<Music> myMusic(User user) {
+    return musicRepo.findByUserAuthor(user);
+  }
+
+  public void removeMusic(Music music) {
+    music.setUserAuthor(null);
+    musicRepo.save(music);
+  }
+
 }

@@ -21,7 +21,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/music/**")
+    registry.addResourceHandler("/musics/**")
         .addResourceLocations("file://" + uploadPath + "/");
     registry.addResourceHandler("/static/**")
         .addResourceLocations("classpath:/static/");
