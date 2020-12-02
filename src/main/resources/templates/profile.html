@@ -14,13 +14,14 @@
       </li>
     </ul>
     <!-- Tab panes -->
-    <div class="tab-content mx-auto" style="width: 650px">
+    <div th:v-if="${#authentication.principal.username} === this.$store.state.auth" class="tab-content mx-auto" style="width: 650px">
       <div class="tab-pane active container" id="myMusic">
         <musics :musics="myMusics"></musics>
       </div>
       <div class="tab-pane container" id="buyingMusic">
         <musics :musics="buyMusics"></musics>
       </div>
+      <music-player url="" class="fixed-bottom w-100 bg-dark text-light d-flex" style="height: 80px"></music-player>
     </div>
   </div>
   <script src="/static/js/profile.js"></script>

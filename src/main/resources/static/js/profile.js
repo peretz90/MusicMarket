@@ -9,39 +9,6 @@ const purchasedMusicsApi = Vue.resource('/music/purchased-music');
 const authApi = Vue.resource('/user/auth');
 const removeBuyingMusicApi = Vue.resource('/user/buying-music{/id}');
 
-let containsUser = (user, userList) => {
-  for (let u of userList) {
-    if (u.id === user.id) {
-      return true;
-    }
-  }
-  return false;
-}
-
-const convertTimeHHMMSS = (val) => {
-  let hhmmss = new Date(val * 1000).toISOString().substr(11, 8);
-
-  return hhmmss.indexOf("00:") === 0 ? hhmmss.substr(3) : hhmmss;
-};
-
-let containsMusic = (musicId, musicList) => {
-  for (let m of musicList) {
-    if (m.id === musicId) {
-      return true;
-    }
-  }
-  return false;
-};
-
-let getIndex = (list, id) => {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].id === id) {
-      return i;
-    }
-  }
-  return -1;
-}
-
 const store = new Vuex.Store({
   state: {
     music: undefined,
@@ -52,7 +19,8 @@ const store = new Vuex.Store({
     name: '',
     auth: '',
     myMusics: [],
-    buyMusics: []
+    buyMusics: [],
+    user: null
   },
   mutations: {
     setMusic(state, music) {
@@ -95,9 +63,45 @@ const store = new Vuex.Store({
     deleteBuyMusic(state, id) {
       let index = getIndex(state.buyMusics, id);
       state.buyMusics.splice(index, 1);
+    },
+    setUser(state, user) {
+      state.user = user;
     }
   }
 });
+
+let containsUser = (user, userList) => {
+  for (let u of userList) {
+    if (u.id === user.id) {
+      return true;
+    }
+  }
+  return false;
+}
+
+const convertTimeHHMMSS = (val) => {
+  let hhmmss = new Date(val * 1000).toISOString().substr(11, 8);
+
+  return hhmmss.indexOf("00:") === 0 ? hhmmss.substr(3) : hhmmss;
+};
+
+let containsMusic = (musicId, musicList) => {
+  for (let m of musicList) {
+    if (m.id === musicId) {
+      return true;
+    }
+  }
+  return false;
+};
+
+let getIndex = (list, id) => {
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].id === id) {
+      return i;
+    }
+  }
+  return -1;
+}
 
 Vue.component('music-player', {
   template: `
@@ -157,7 +161,7 @@ Vue.component('music-player', {
       this.audio.addEventListener('play', () => {this.$store.commit('setPlayingTrue');});
       this.audio.addEventListener('pause', () => {this.$store.commit('setPlayingFalse');});
       this.audio.addEventListener('ended', () => {this.$store.state.audio.currentTime = 0});
-      this.$store.commit('setAudio', this.$el.querySelector('audio'));
+      this.$store.commit('setAudio', this.audio);
       this.$store.state.audio.play();
     },
     rewind(e) {
@@ -343,6 +347,7 @@ Vue.component('user-info', {
       if (r.ok) {
         r.json().then(data => {
           this.user = data;
+          this.$store.commit('setUser', data);
           this.isSub = containsUser(data, this.subscriptionUsers);
         })
       }
@@ -407,7 +412,6 @@ Vue.component('musics', {
             :key="music.id"
         ></music-row>
       </div>
-      <music-player url="" class="fixed-bottom w-100 bg-dark text-light d-flex" style="height: 80px"></music-player>
     </div>
   `
 });
