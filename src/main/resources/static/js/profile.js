@@ -8,6 +8,7 @@ const musicsDeleteApi = Vue.resource('/music{/id}');
 const purchasedMusicsApi = Vue.resource('/music/purchased-music');
 const authApi = Vue.resource('/user/auth');
 const removeBuyingMusicApi = Vue.resource('/user/buying-music{/id}');
+const getMusicAuthorApi = Vue.resource('/music/music-author{/id}');
 
 const store = new Vuex.Store({
   state: {
@@ -20,7 +21,9 @@ const store = new Vuex.Store({
     auth: '',
     myMusics: [],
     buyMusics: [],
-    user: null
+    user: null,
+    username: '',
+    musicAuthor: []
   },
   mutations: {
     setMusic(state, music) {
@@ -66,6 +69,10 @@ const store = new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user;
+      state.username = user.username;
+    },
+    setMusicAuthor(state, musicAuthor) {
+      state.musicAuthor = musicAuthor;
     }
   }
 });
@@ -352,6 +359,13 @@ Vue.component('user-info', {
         })
       }
     });
+    getMusicAuthorApi.get({id: this.id}).then(r => {
+      if (r.ok) {
+        r.json().then(data => {
+          this.$store.commit('setMusicAuthor', data);
+        })
+      }
+    })
   },
   methods: {
     editEmail() {

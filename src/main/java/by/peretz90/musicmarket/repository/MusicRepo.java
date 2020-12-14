@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface MusicRepo extends JpaRepository<Music, Long> {
   List<Music> findByUserAuthor(User user);
+  List<Music> findByNameStartingWith(String inputSearch);
 }

@@ -1,6 +1,7 @@
 const musicsApi = Vue.resource('/music{/id}');
 const authApi = Vue.resource('/user/auth');
 const authArrApi = Vue.resource('/user/authArr');
+const searchMusicApi = Vue.resource('/music/search{/input}');
 
 const convertTimeHHMMSS = (val) => {
   let hhmmss = new Date(val * 1000).toISOString().substr(11, 8);
@@ -253,9 +254,13 @@ new Vue({
   store,
   data: () => ({
     musics: [],
+    searchMusic: ''
   }),
   template: `
     <div>
+      <div class="mx-auto my-5" style="width: 500px">
+        <input type="text" style="width: 500px" placeholder="Search by title or author" v-model="searchMusic">
+      </div>
       <h3 class="mx-auto" style="width: 500px">Music List</h3>
       <div style="margin-bottom: 88px">
         <music-row v-for="music in this.$store.state.musics" v-if="music.userAuthor !== null"
@@ -284,5 +289,26 @@ new Vue({
       }
     })
     this.$store.commit('setMusics', this.musics);
+  },
+  watch: {
+    searchMusic(value) {
+      if (value !== '') {
+        searchMusicApi.get({input: value}).then(r => {
+          if (r.ok) {
+            r.json().then(data => {
+              this.$store.commit('setMusics', data);
+            })
+          }
+        })
+      } else {
+        searchMusicApi.get().then(r => {
+          if (r.ok) {
+            r.json().then(data => {
+              this.$store.commit('setMusics', data);
+            })
+          }
+        })
+      }
+    }
   }
 });

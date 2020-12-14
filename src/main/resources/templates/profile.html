@@ -5,7 +5,7 @@
   <div th:replace="commons/fragments.html :: navbar"></div>
   <div id="profile">
     <user-info th:id="${id}" th:auth="${#authentication.principal.username}"></user-info>
-    <ul class="nav nav-tabs mx-auto mt-5" style="width: 650px">
+    <ul v-if="this.$store.state.auth === this.$store.state.username" class="nav nav-tabs mx-auto mt-5" style="width: 650px">
       <li class="nav-item">
         <a class="nav-link active" data-toggle="tab" href="#myMusic">Your music</a>
       </li>
@@ -14,12 +14,12 @@
       </li>
     </ul>
     <!-- Tab panes -->
-    <div th:v-if="${#authentication.principal.username} === this.$store.state.auth" class="tab-content mx-auto" style="width: 650px">
+    <div v-if="this.$store.state.auth === this.$store.state.username" class="tab-content mx-auto" style="width: 650px">
       <div class="tab-pane active container" id="myMusic">
-        <musics :musics="myMusics"></musics>
+        <musics :musics="this.$store.state.myMusics"></musics>
       </div>
       <div class="tab-pane container" id="buyingMusic">
-        <musics :musics="buyMusics"></musics>
+        <musics :musics="this.$store.state.buyMusics"></musics>
       </div>
       <music-player url="" class="fixed-bottom w-100 bg-dark text-light d-flex" style="height: 80px"></music-player>
     </div>

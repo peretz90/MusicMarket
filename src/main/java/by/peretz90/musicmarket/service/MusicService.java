@@ -12,9 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -74,4 +74,19 @@ public class MusicService {
     musicRepo.save(music);
   }
 
+  public List<Music> searchMusic(String inputSearch) {
+    if (!inputSearch.isEmpty()) {
+      List<Music> result = musicRepo.findByNameStartingWith(inputSearch);
+      List<User> authorList = userRepo.findByUsernameStartingWith(inputSearch);
+      for (User u : authorList) {
+        List<Music> listMusic = musicRepo.findByUserAuthor(u);
+        result = Stream.of(result, listMusic)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+      }
+      return result;
+    } else {
+      return musicRepo.findAll();
+    }
+  }
 }

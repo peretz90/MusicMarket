@@ -53,9 +53,24 @@ public class MusicRestController {
     return musicService.myMusic(user);
   }
 
+  @GetMapping("/music-author/{id}")
+  public List<Music> listMusicAuthor(@PathVariable("id") User user) {
+    return musicService.myMusic(user);
+  }
+
   @GetMapping("/purchased-music")
   public Set<Music> listPurchasedMusic(@AuthenticationPrincipal User user) {
     return user.getBuyingMusic();
+  }
+
+  @GetMapping("/search/{input}")
+  public List<Music> listMusicSearch(@PathVariable("input") String inputSearch) {
+    return musicService.searchMusic(inputSearch);
+  }
+
+  @GetMapping("/search")
+  public List<Music> allMusicSearch() {
+    return musicService.getAllMusic();
   }
 
 }
